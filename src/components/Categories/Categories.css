@@ -1,0 +1,95 @@
+.main .categories {
+  margin-bottom: 4.375em;
+}
+
+.main .categories .category {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0.625em;
+  cursor: pointer;
+}
+
+.main .categories .category.category--active .category__title {
+  border-bottom: 1px solid #ffffff;
+}
+
+.main .categories .category .category__icon {
+  margin-right: 0.625em;
+  width: 1em;
+  height: 1em;
+}
+
+.main .categories .category .category__title {
+  color: #ffffff;
+}
+
+@media screen and (min-width: 576px) {
+  .main .categories .category .category__icon {
+    width: 1.125em;
+    height: 1.125em;
+  }
+  .main .categories .category .category__title {
+    font-size: 1.125rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .main .categories {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+  }
+  .main .categories .category {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+  .main .categories .category .category__icon {
+    margin-right: 0;
+    margin-bottom: 0.3125em;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .main .categories .category {
+    position: relative;
+    overflow: hidden;
+  }
+  .main .categories .category:hover::after {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  .main .categories .category::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #ffffff;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  }
+  .main .categories .category.category--active:hover::after {
+    -webkit-transform: translateX(-10%);
+    transform: translateX(-10%);
+  }
+  .main .categories .category.category--active::after {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  .main .categories .category.category--active .category__title {
+    border-bottom: none;
+  }
+}
