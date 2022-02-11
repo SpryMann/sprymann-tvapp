@@ -1,6 +1,6 @@
 # TvAPP application
 
-## Опробовать можно [здесь] (https://sprymann-tvapp.web.app/movies)
+## Опробовать можно [здесь](https://sprymann-tvapp.web.app/movies)
 
 ## TODO
 
