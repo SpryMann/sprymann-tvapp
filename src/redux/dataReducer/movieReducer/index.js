@@ -3,6 +3,8 @@ import {
   initialState,
   UPDATE_CURRENT_MOVIE,
   UPDATE_MOVIES,
+  UPDATE_MOVIE_VIDEOS,
+  UPDATE_SERACH_RESULTS,
 } from './consts';
 
 const movieReducer = (state = initialState, action) => {
@@ -13,6 +15,10 @@ const movieReducer = (state = initialState, action) => {
       return { ...state, currentMovieId: action.payload };
     case UPDATE_CURRENT_MOVIE:
       return { ...state, currentMovie: action.payload };
+    case UPDATE_SERACH_RESULTS:
+      return { ...state, searchResults: action.payload };
+    case UPDATE_MOVIE_VIDEOS:
+      return { ...state, movieVideos: action.payload };
     default:
       return state;
   }

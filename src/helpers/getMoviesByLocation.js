@@ -4,6 +4,7 @@ import {
   getUpcomingMovies,
 } from '../http/requests';
 import getFavoriteMovies from './getFavoriteMovies';
+import getHistoryMovies from './getHistoryMovies';
 
 const getMoviesByLocation = async (location) => {
   try {
@@ -21,6 +22,9 @@ const getMoviesByLocation = async (location) => {
         return data;
       case '/movies/favorite':
         data = await getFavoriteMovies();
+        return data;
+      case '/movies/history':
+        data = await getHistoryMovies();
         return data;
       default:
         return [];

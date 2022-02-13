@@ -1,4 +1,4 @@
-import db from '../fireabse-config';
+import db from '../firebase-config';
 import { setDoc, doc } from 'firebase/firestore';
 
 const updateUserInfo = async (userId, name, nickname, imageUrl) => {

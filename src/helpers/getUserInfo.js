@@ -1,4 +1,4 @@
-import db from '../fireabse-config';
+import db from '../firebase-config';
 import { getDoc, doc } from 'firebase/firestore';
 
 const getUserInfo = async (userId) => {

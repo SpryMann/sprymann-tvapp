@@ -1,0 +1,90 @@
+.videos {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.videos .videos__content {
+  border-radius: 0.625em;
+  padding: 1.875em;
+  width: 90%;
+  height: auto;
+  background: #17041e;
+}
+
+.videos .videos__content .videos__head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.videos .videos__content .videos__video {
+  max-width: 100%;
+  height: auto;
+}
+
+.videos .videos__button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-right: 0.625em;
+  width: 2em;
+  height: 2em;
+}
+
+.videos .videos__button.videos__button--close {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.videos .videos__button .videos__icon {
+  width: auto;
+  height: 1.875em;
+}
+
+.videos .videos__button .videos__icon path {
+  fill: #ffffff;
+}
+
+@media screen and (max-width: 500px) {
+  .videos .videos__content {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .videos .videos__content {
+    width: 37.5em;
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .videos .videos__content {
+    height: 100%;
+    overflow-y: auto;
+  }
+}

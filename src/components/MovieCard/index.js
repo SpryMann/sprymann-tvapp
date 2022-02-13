@@ -1,13 +1,22 @@
+import './MovieCard.css';
+import Star from '../Star';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentMovie } from '../../http/requests';
-import { UPDATE_CURRENT_MOVIE } from '../../redux/dataReducer/movieReducer/consts';
+import { getCurrentMovie, getMovieVideos } from '../../http/requests';
+import {
+  UPDATE_CURRENT_MOVIE,
+  UPDATE_MOVIE_VIDEOS,
+} from '../../redux/dataReducer/movieReducer/consts';
 import checkIsMovieFavorite from '../../helpers/checkIsMovieFavorite';
-import Star from '../Star';
-import './MovieCard.css';
 import addMovieToFavorite from '../../helpers/addMovieToFavorite';
 import removeMovieFromFavorite from '../../helpers/removeMovieFromFavorite';
 import { useNavigate } from 'react-router-dom';
+import {
+  UPDATE_IS_LOADING,
+  CHANGE_MESSAGE,
+  CHANGE_SHOW_MESSAGE,
+  CHANGE_SHOW_MOVIE_VIDEOS,
+} from '../../redux/uiReducer/consts';
 
 const MovieCard = ({ updateFavorites, updateMovies }) => {
   const dispatch = useDispatch();
@@ -22,23 +31,62 @@ const MovieCard = ({ updateFavorites, updateMovies }) => {
 
   const handleClickFavoriteButton = () => {
     if (!user) {
+      dispatch({
+        type: CHANGE_MESSAGE,
+        payload:
+          'You need to be signed in to have an access to favorite movies',
+      });
+      dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
       return navigate('/signin');
     }
-
+    dispatch({ type: UPDATE_IS_LOADING, payload: true });
     updateFavorites().then(() => {
       if (checkIsMovieFavorite(favoriteMovies, currentMovieId)) {
-        removeMovieFromFavorite(currentMovieId, user.uid).then(() => {
-          setIsFavorite(false);
-          updateMovies();
-          updateFavorites();
-        });
+        removeMovieFromFavorite(currentMovieId, user.uid)
+          .then(() => {
+            setIsFavorite(false);
+            updateMovies();
+            updateFavorites();
+            dispatch({
+              type: CHANGE_MESSAGE,
+              payload: 'Movie removed from favorite',
+            });
+            dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+          })
+          .catch((error) => {
+            dispatch({ type: CHANGE_MESSAGE, payload: error.code });
+            dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+          });
       } else {
-        addMovieToFavorite(currentMovie, user.uid).then(() => {
-          setIsFavorite(true);
-          updateFavorites();
-        });
+        addMovieToFavorite(currentMovie, user.uid)
+          .then(() => {
+            setIsFavorite(true);
+            updateFavorites();
+            dispatch({
+              type: CHANGE_MESSAGE,
+              payload: 'Movie added to favorite',
+            });
+            dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+          })
+          .catch((error) => {
+            dispatch({ type: CHANGE_MESSAGE, payload: error.code });
+            dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+          });
       }
+      dispatch({ type: UPDATE_IS_LOADING, payload: false });
     });
+  };
+
+  const handleClickWatch = () => {
+    getMovieVideos(currentMovieId)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_MOVIE_VIDEOS,
+          payload: data,
+        });
+        dispatch({ type: CHANGE_SHOW_MOVIE_VIDEOS, payload: true });
+      })
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -57,13 +105,15 @@ const MovieCard = ({ updateFavorites, updateMovies }) => {
 
   return (
     <div className="card">
-      <img
-        className="card__poster"
-        src={
-          process.env.REACT_APP_TMDB_IMAGE_BASEURL + currentMovie.poster_path
-        }
-        alt={currentMovie.title}
-      />
+      {currentMovie.poster_path && (
+        <img
+          className="card__poster"
+          src={
+            process.env.REACT_APP_TMDB_IMAGE_BASEURL + currentMovie.poster_path
+          }
+          alt={currentMovie.title}
+        />
+      )}
 
       <div className="card__info">
         <h2 className="card__title">
@@ -112,7 +162,7 @@ const MovieCard = ({ updateFavorites, updateMovies }) => {
         </div>
 
         <div className="card__buttons">
-          <button className="buttons__play">
+          <button className="buttons__play" onClick={() => handleClickWatch()}>
             <svg
               className="play__icon"
               viewBox="0 0 11 14"

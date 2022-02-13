@@ -1,4 +1,4 @@
-import { auth } from '../../fireabse-config';
+import { auth } from '../../firebase-config';
 
 export const initialState = {
   user: auth.currentUser || JSON.parse(localStorage.getItem('users')),

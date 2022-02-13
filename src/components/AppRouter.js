@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../fireabse-config';
+import { auth } from '../firebase-config';
 import { LOGIN_USER, LOGOUT_USER } from '../redux/userReducer/consts';
 import MoviesPage from '../pages/MoviesPage';
 import ProfilePage from '../pages/ProfilePage';
@@ -40,6 +40,9 @@ const AppRouter = () => {
       <Route path="/">
         {!user && (
           <Route path="movies/favorite" element={<Navigate to={'/signup'} />} />
+        )}
+        {!user && (
+          <Route path="movies/history" element={<Navigate to={'/signup'} />} />
         )}
         <Route path="movies" element={<MoviesPage />}>
           <Route path="*" element={<MoviesPage />} />

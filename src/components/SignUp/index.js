@@ -3,23 +3,39 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import signUpUser from '../../helpers/signUpUser';
 import signInUser from '../../helpers/signInUser';
+import { useDispatch } from 'react-redux';
+import {
+  CHANGE_MESSAGE,
+  CHANGE_SHOW_MESSAGE,
+} from '../../redux/uiReducer/consts';
 
 const SignUp = () => {
   const location = useLocation().pathname;
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
+  const dispatch = useDispatch();
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
 
     if (location === '/signup') {
-      signUpUser(emailInput, passwordInput).catch((error) =>
-        console.log(error)
-      );
+      signUpUser(emailInput, passwordInput)
+        .then(() => {
+          dispatch({
+            type: CHANGE_MESSAGE,
+            payload: 'Пользователь успешно создан',
+          });
+          dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+        })
+        .catch((error) => {
+          dispatch({ type: CHANGE_MESSAGE, payload: error.code });
+          dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+        });
     } else if (location === '/signin') {
-      signInUser(emailInput, passwordInput).catch((error) =>
-        console.log(error)
-      );
+      signInUser(emailInput, passwordInput).catch((error) => {
+        dispatch({ type: CHANGE_MESSAGE, payload: error.code });
+        dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+      });
     }
   };
 

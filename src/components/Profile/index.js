@@ -1,8 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { auth } from '../../fireabse-config';
+import { auth } from '../../firebase-config';
 import getUserInfo from '../../helpers/getUserInfo';
 import updateUserInfo from '../../helpers/updateUserInfo';
+import {
+  UPDATE_IS_LOADING,
+  CHANGE_MESSAGE,
+  CHANGE_SHOW_MESSAGE,
+} from '../../redux/uiReducer/consts';
 import { UPDATE_USER_INFO } from '../../redux/userReducer/consts';
 import './Profile.css';
 
@@ -20,20 +25,27 @@ const Profile = () => {
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
-    updateUserInfo(user.uid, nameInput, nicknameInput, urlInput).then(() =>
-      getInfo()
-    );
+    updateUserInfo(user.uid, nameInput, nicknameInput, urlInput).then(() => {
+      getInfo();
+      dispatch({ type: CHANGE_MESSAGE, payload: 'Data about user updated' });
+      dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+    });
   };
 
   const getInfo = useCallback(() => {
+    dispatch({ type: UPDATE_IS_LOADING, payload: true });
     getUserInfo(user.uid)
       .then((data) => {
         dispatch({ type: UPDATE_USER_INFO, payload: data });
         setNameInput(data.name);
         setNicknameInput(data.nickname);
         setUrlInput(data.imageUrl);
+        dispatch({ type: UPDATE_IS_LOADING, payload: false });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        dispatch({ type: CHANGE_MESSAGE, payload: error.code });
+        dispatch({ type: CHANGE_SHOW_MESSAGE, payload: true });
+      });
   }, [user, dispatch]);
 
   useEffect(() => {
@@ -66,7 +78,7 @@ const Profile = () => {
         </button>
       </div>
 
-      <form className="profile__edit" onClick={(e) => handleSubmitForm(e)}>
+      <form className="profile__edit" onSubmit={(e) => handleSubmitForm(e)}>
         <div className="edit__wrap edit__wrap--half">
           <p className="edit__heading">Name</p>
           <input
